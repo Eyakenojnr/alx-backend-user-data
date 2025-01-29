@@ -33,10 +33,13 @@ def bef_req():
         excluded = [
             "/api/v1/status/",
             "/api/v1/unauthorized/",
+            '/api/v1/forbidden/'
         ]
         if auth.require_auth(request.path, excluded):
             if auth.authorization_header(request) is None:
                 abort(401, description="Unauthorized")
+            if auth.authorization_header(request) is None:
+                abort(403, description='Forbidden')
 
 
 @app.errorhandler(404)
@@ -51,6 +54,13 @@ def unauthorized(error) -> str:
     """ Request unauthorized handler
     """
     return jsonify({"error": "Unauthorized"}), 401
+
+
+@app.errorhandler(403)
+def forbidden(error) -> str:
+    """ Request unauthorized handler
+    """
+    return jsonify({'error': 'Forbidden'}), 403
 
 
 if __name__ == "__main__":
