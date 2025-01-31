@@ -28,7 +28,7 @@ def bef_req():
     Filter each request before it's handled by the proper route.
     """
     if auth is None:
-        return
+        pass
     else:
         excluded = [
             "/api/v1/status/",
@@ -38,7 +38,7 @@ def bef_req():
         if auth.require_auth(request.path, excluded):
             if auth.authorization_header(request) is None:
                 abort(401, description="Unauthorized")
-            if auth.authorization_header(request) is None:
+            if auth.current_user(request) is None:
                 abort(403, description='Forbidden')
 
 
