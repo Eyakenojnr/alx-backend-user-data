@@ -41,7 +41,7 @@ def bef_req():
     if auth is None:
         return  # Ensures Flask continues processing
 
-    excluded = [
+    excluded_paths = [
         "/api/v1/status/",
         "/api/v1/unauthorized/",
         '/api/v1/forbidden/',
@@ -49,12 +49,12 @@ def bef_req():
     ]
     requested_path = request.path.rstrip("/")   # Normalize path
 
-    if not auth.require_auth(request_path, excluded_paths):
+    if not auth.require_auth(requested_path, excluded_paths):
         return  # Allow request to proceed
 
-    cookie = auth.session_cookie(request)
+    #cookie = auth.session_cookie(request)
 
-    if auth.authorization_header(request) is None and cookie is None:
+    if auth.authorization_header(request) is None: # and cookie is None:
         abort(401, description="Unauthorized")
     if auth.current_user(request) is None:
         abort(403, description="Forbidden")
