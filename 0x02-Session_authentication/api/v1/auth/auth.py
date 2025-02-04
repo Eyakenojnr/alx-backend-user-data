@@ -4,6 +4,7 @@ Auth class definition
 """
 from flask import request
 from typing import List, TypeVar
+import os
 
 
 class Auth:
